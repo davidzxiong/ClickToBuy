@@ -1,0 +1,4 @@
+from abstract_application import Application
+from img_to_vector_app import Image2VectorApp
+from get_url_app import GetUrlApp
+from test_app import TestApp
