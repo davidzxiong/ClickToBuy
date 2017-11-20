@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # This is a controller class to control all the process
 
+from PIL import Image
 from worker import Worker
 from utils import logger
 
@@ -47,22 +48,19 @@ def error_code():
     return "Hello world"
 
 
-@app.route("/query", methods=["GET"])
+@app.route("/query", methods=["POST"])
 def fetch_result():
-    args = flask.request.args
-    key = args.get("id", None)
-    print("key is what?", key)
-    if key is None:
-        return "Error: You need specify oss keys"
-
+    image = Image.open(flask.request.files['file'])
+    print "image is", type(image), image
+    image.show()
     results = dict()
     try:
-        product_url = worker.parse(key)
-        results[key] = {"url":str(product_url)}
-        logger.info("%s: %s" %(key, str(product_url)))
+        product_url = worker.parse(image)
+        results["url"] = str(product_url)
+        logger.info("%s" % str(product_url))
     except Exception as e:
-        results[key] = {"error":"9999"}
-        logger.error("Parse error for key %s" % key)
+        results["error"] = "9999"
+        logger.error("Parse error")
         logger.error("%s" % e)
     # Convert results to json format
     return json.dumps(results)
