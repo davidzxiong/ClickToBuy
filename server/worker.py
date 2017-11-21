@@ -43,10 +43,11 @@ class Worker(object):
 
         if not os.path.exists(self._swap_space):
             os.mkdir(self._swap_space)
-        
+
         for app in self._app_pipelines:
             result, error_code = app.run(result, *args, **kwargs)
-            if result is None or not result:
+            print app.name, len(result), error_code
+            if result is None:
                 self._logger.error("App:%s parse data error" % app.name)
                 return error_code
 

@@ -13,8 +13,7 @@ class GetUrlApp(Application):
         return True
 
     def run(self, previous_result, *args, **kwargs):
-        if previous_result == [1]:
+        vector = previous_result
+        if vector.shape[0] == 512:
             result = "https://amazon.com/id=1"
-        elif previous_result == [2]:
-            result = "https://amazon.com/id=2"
         return result, 0

@@ -2,6 +2,7 @@ dependencies:
 -python 2.7
 -flask
 -PIL
+-pytorch on python 2.7
 
 how to run?
 python controller.py server.conf

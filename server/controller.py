@@ -9,6 +9,7 @@ import ConfigParser
 import error_def
 import flask
 import json
+import numpy as np
 import os
 import sys
 import uuid
@@ -51,8 +52,11 @@ def error_code():
 @app.route("/query", methods=["POST"])
 def fetch_result():
     image = Image.open(flask.request.files['file'])
+    image = image.resize((224, 224), Image.ANTIALIAS)
     print "image is", type(image), image
     image.show()
+    image = np.array(image)
+    print image.shape
     results = dict()
     try:
         product_url = worker.parse(image)
