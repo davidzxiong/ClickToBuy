@@ -4,6 +4,7 @@
 from PIL import Image
 from worker import Worker
 from utils import logger
+from flask.ext.sqlalchemy import SQLAlchemy
 
 import ConfigParser
 import error_def
@@ -37,6 +38,7 @@ def _init_environment(config_file):
     sys.path.append("app/face_net/src")
 
 app = flask.Flask(__name__)
+db = SQLAlchemy(application)
 
 
 @app.route("/")
@@ -80,6 +82,7 @@ if __name__ == '__main__':
     host = config.get("server", "listen_ip")
     port = config.getint("server", "port")
     logger.info("%d processes started on host %s" % (num_process, host))
+    app.config['SQLALCHEMY_DATABASE_URI'] = config.get("db", "SQLALCHEMY_DATABASE_URI")
     app.run(
         host=host,
         port=port,
