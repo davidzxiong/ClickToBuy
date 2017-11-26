@@ -19,8 +19,9 @@ files = os.listdir(path)
 
 id_url_table = pd.read_excel(os.path.join(path, 'id_url_table.xlsx'), dtype={'id':str, 'url':str})
 
-model = torchvision.models.resnet18(pretrained=True)
+model = torchvision.models.resnet101(pretrained=True)
 model = nn.Sequential(*list(model.children())[:-1])
+
 
 def img_to_vec(image):
     h, w, c = image.shape
@@ -38,8 +39,9 @@ for index, row in id_url_table.iterrows():
     img = Image.open(filename)
     img = img.resize((224, 224), Image.ANTIALIAS)
     img = np.array(img)
-    vec = str(img_to_vec(img))[1:-1]
-    data[vec] = row['url']
+    vec = img_to_vec(img)
+    key = ','.join(list(map(str, vec)))
+    data[key] = row['url']
 
 with open(os.path.join(path, 'data.json'), 'w') as f:
     json.dump(data, f)

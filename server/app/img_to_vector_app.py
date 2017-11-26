@@ -13,7 +13,7 @@ class Image2VectorApp(Application):
         super(Image2VectorApp, self).__init__(logger)
         self._name = "Image2Vector"
         self._tmp_dir = None
-        self.model = torchvision.models.resnet18(pretrained=True)
+        self.model = torchvision.models.resnet101(pretrained=True)
 
     def init(self, *args, **kwargs):
         if len(args) > 0:
