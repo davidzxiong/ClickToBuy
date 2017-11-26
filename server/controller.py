@@ -55,10 +55,10 @@ def error_code():
 def fetch_result():
     image = Image.open(flask.request.files['file'])
     image = image.resize((224, 224), Image.ANTIALIAS)
-    print "image is", type(image), image
-    image.show()
+    #print "image is", type(image), image
+    #image.show()
     image = np.array(image)
-    print image.shape
+    #print image.shape
     results = dict()
     try:
         product_url = worker.parse(image)
