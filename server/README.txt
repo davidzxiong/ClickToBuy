@@ -3,6 +3,8 @@ dependencies:
 -flask
 -PIL
 -pytorch on python 2.7
+-pandas
+-xlrd
 
 how to run?
 python controller.py server.conf
