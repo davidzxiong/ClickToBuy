@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-# Author: Jie Liu (liuj1229@gmail.com)
-# This is an class for fetching pictures from specified hosts
 
 from abstract_application import Application
-from torch.optim import lr_scheduler
 from torch.autograd import Variable
-from torchvision import datasets, models, transforms
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
