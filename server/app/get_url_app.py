@@ -17,7 +17,7 @@ class GetUrlApp(Application):
         raw_data = json.load(open(os.path.join(path,'data.json'), 'r'))
         self.data = dict()
         for key, value in raw_data.items():
-            key = tuple(map(float, key.split()))
+            key = tuple(map(float, key.split(',')))
             self.data[key] = value
 
     def init(self, *args, **kwargs):
