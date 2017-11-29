@@ -14,6 +14,7 @@ import numpy as np
 import os
 import sys
 import uuid
+import base64
 
 config = ConfigParser.ConfigParser()
 
@@ -38,7 +39,7 @@ def _init_environment(config_file):
     sys.path.append("app/face_net/src")
 
 app = flask.Flask(__name__)
-db = SQLAlchemy(application)
+#db = SQLAlchemy(application)
 
 
 @app.route("/")
@@ -53,11 +54,18 @@ def error_code():
 
 @app.route("/query", methods=["POST"])
 def fetch_result():
-    image = Image.open(flask.request.files['file'])
-    image = image.resize((224, 224), Image.ANTIALIAS)
+    input_data = base64.decodestring(flask.request.data)
+    image_data = []
+    for i in range(224):
+        row = []
+        for j in range(0, 224 * 6, 2):
+            row.append(16 * ord(input_data[j]) + ord(input_data[j + 1]))
+        image_data.append(row)
+    #image = Image.frombytes('RGB', (244,244), bytearray(base64.decodestring(flask.request.data)))
+    #image = image.resize((224, 224), Image.ANTIALIAS)
     #print "image is", type(image), image
     #image.show()
-    image = np.array(image)
+    image = np.array(image_data)
     #print image.shape
     results = dict()
     try:
@@ -82,7 +90,7 @@ if __name__ == '__main__':
     host = config.get("server", "listen_ip")
     port = config.getint("server", "port")
     logger.info("%d processes started on host %s" % (num_process, host))
-    app.config['SQLALCHEMY_DATABASE_URI'] = config.get("db", "SQLALCHEMY_DATABASE_URI")
+    #app.config['SQLALCHEMY_DATABASE_URI'] = config.get("db", "SQLALCHEMY_DATABASE_URI")
     app.run(
         host=host,
         port=port,
