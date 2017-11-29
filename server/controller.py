@@ -54,18 +54,23 @@ def error_code():
 
 @app.route("/query", methods=["POST"])
 def fetch_result():
-    input_data = base64.decodestring(flask.request.data)
-    image_data = []
-    for i in range(224):
-        row = []
-        for j in range(0, 224 * 6, 2):
-            row.append(16 * ord(input_data[j]) + ord(input_data[j + 1]))
-        image_data.append(row)
-    #image = Image.frombytes('RGB', (244,244), bytearray(base64.decodestring(flask.request.data)))
-    #image = image.resize((224, 224), Image.ANTIALIAS)
-    #print "image is", type(image), image
-    #image.show()
-    image = np.array(image_data)
+    try:
+        input_data = base64.decodestring(flask.request.data)
+        image_data = []
+        for i in range(224):
+            row = []
+            for j in range(0, 224 * 6, 2):
+                row.append(16 * ord(input_data[j]) + ord(input_data[j + 1]))
+            image_data.append(row)
+        #image = Image.frombytes('RGB', (244,244), bytearray(base64.decodestring(flask.request.data)))
+        #image = image.resize((224, 224), Image.ANTIALIAS)
+        #print "image is", type(image), image
+        #image.show()
+        image = np.array(image_data)
+    except Exception as e:
+        results["error"] = "9998"
+        logger.error("convert error")
+        logger.error("%s" % e)
     #print image.shape
     results = dict()
     try:
