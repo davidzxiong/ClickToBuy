@@ -57,7 +57,7 @@ def fetch_result():
     results = dict()
     try:
         input_data = base64.decodestring(flask.request.data)
-        print len(input_data)
+        logger.error(len(input_data))
         image_data = []
         for i in range(224):
             row = []
