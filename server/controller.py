@@ -57,22 +57,25 @@ def fetch_result():
     results = dict()
     try:
         input_data = base64.decodestring(flask.request.data)
-        logger.error(len(input_data))
-        image_data = []
+        #logger.error(len(input_data))
+        image_data = np.array()
         for i in range(224):
-            row = []
-            for j in range(0, 224 * 6, 2):
-                row.append(16 * ord(input_data[i * 224 + j]) + ord(input_data[i * 224 + j + 1]))
+            row = np.array()
+            for j in range(0, 224 * 8, 4):
+                pixel = np.array()
+                for k in range(3):
+                    pixel.append(ord(input_data[i * 224 + j + k]))
+                row.append(pixel)
             image_data.append(row)
         #image = Image.frombytes('RGB', (244,244), bytearray(base64.decodestring(flask.request.data)))
         #image = image.resize((224, 224), Image.ANTIALIAS)
         #print "image is", type(image), image
         #image.show()
-        image = np.array(image_data)
     except Exception as e:
         results["error"] = "9998"
         logger.error("convert error")
         logger.error("%s" % e)
+        return json.dumps(results)
     #print image.shape
     
     try:
