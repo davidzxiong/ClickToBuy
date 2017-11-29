@@ -4,7 +4,7 @@
 from PIL import Image
 from worker import Worker
 from utils import logger
-from flask.ext.sqlalchemy import SQLAlchemy
+#from flask.ext.sqlalchemy import SQLAlchemy
 
 import ConfigParser
 import error_def
