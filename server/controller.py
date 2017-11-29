@@ -54,13 +54,15 @@ def error_code():
 
 @app.route("/query", methods=["POST"])
 def fetch_result():
+    results = dict()
     try:
         input_data = base64.decodestring(flask.request.data)
+        print len(input_data)
         image_data = []
         for i in range(224):
             row = []
             for j in range(0, 224 * 6, 2):
-                row.append(16 * ord(input_data[j]) + ord(input_data[j + 1]))
+                row.append(16 * ord(input_data[i * 224 + j]) + ord(input_data[i * 224 + j + 1]))
             image_data.append(row)
         #image = Image.frombytes('RGB', (244,244), bytearray(base64.decodestring(flask.request.data)))
         #image = image.resize((224, 224), Image.ANTIALIAS)
@@ -72,7 +74,7 @@ def fetch_result():
         logger.error("convert error")
         logger.error("%s" % e)
     #print image.shape
-    results = dict()
+    
     try:
         product_url = worker.parse(image)
         results["url"] = str(product_url)
