@@ -56,17 +56,21 @@ def error_code():
 def fetch_result():
     results = dict()
     try:
-        input_data = base64.decodestring(flask.request.data)
-        logger.error("%d" % len(input_data))
-        image_data = np.array()
-        for i in range(224):
-            row = np.array()
-            for j in range(0, 224 * 8, 4):
-                pixel = np.array()
-                for k in range(3):
-                    pixel.append(ord(input_data[i * 224 + j + k]))
+    #logger.error("%d" % len(flask.request.form['data']))
+        input_data = base64.decodestring(flask.request.form['data'])
+        #logger.error("%d" % len(input_data))
+        image_data = []
+        width = 224
+        height = 224
+        for i in range(height):
+            row = []
+            for j in range(0, width * 4, 4):
+                pixel = []
+                for k in range(0, 3):
+                    pixel.append(ord(input_data[i * width * 4 + j + k]))
                 row.append(pixel)
             image_data.append(row)
+        #logger.error("%s" % image_data)
         #image = Image.frombytes('RGB', (244,244), bytearray(base64.decodestring(flask.request.data)))
         #image = image.resize((224, 224), Image.ANTIALIAS)
         #print "image is", type(image), image
@@ -77,9 +81,16 @@ def fetch_result():
         logger.error("%s" % e)
         return json.dumps(results)
     #print image.shape
-    
+
+    image = Image.fromarray(np.array(image_data).astype('uint8'))
+    image.save("img.jpeg", "JPEG")
+
+    logger.error("%d" % len(image_data))
+    logger.error("%d" % len(image_data[0]))
+    logger.error("%d" % len(image_data[0][0]))
+
     try:
-        product_url = worker.parse(image)
+        product_url = worker.parse(np.array(image_data))
         results["url"] = str(product_url)
         logger.info("%s" % str(product_url))
     except Exception as e:
