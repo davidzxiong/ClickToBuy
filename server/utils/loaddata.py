@@ -36,6 +36,7 @@ data = dict()
 
 for index, row in id_url_table.iterrows():
     filename = os.path.join(path, row['id'] + '.jpg')
+    print filename
     img = Image.open(filename)
     img = img.resize((224, 224), Image.ANTIALIAS)
     img = np.array(img)
