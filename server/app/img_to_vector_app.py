@@ -7,6 +7,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torchvision
+import time
 
 class Image2VectorApp(Application):
     def __init__(self, logger):
@@ -24,6 +25,7 @@ class Image2VectorApp(Application):
         return True
 
     def run(self, previous_result, *args, **kwargs):
+        start_time = time.time()
         image = args[0]
         h, w ,c = image.shape
         x = np.zeros([1,c,h,w])
@@ -31,4 +33,5 @@ class Image2VectorApp(Application):
             x[0,i,:,:] = image[:,:,i]
         x = Variable(torch.from_numpy(x).float())
         result = self.model(x).data.numpy()[0,:,0,0]
+        print "image to vector time is %.2f" % (time.time() - start_time)
         return result, 0

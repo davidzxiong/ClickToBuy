@@ -42,7 +42,8 @@ for index, row in id_url_table.iterrows():
     img = np.array(img)
     vec = img_to_vec(img)
     key = ','.join(list(map(str, vec)))
-    data[key] = row['url']
+    data[key] = row['id'][1] + row['url']
+    print data[key]
 
 with open(os.path.join(path, 'data.json'), 'w') as f:
     json.dump(data, f)

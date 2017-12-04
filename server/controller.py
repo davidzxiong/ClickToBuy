@@ -15,6 +15,7 @@ import os
 import sys
 import uuid
 import base64
+import time
 
 config = ConfigParser.ConfigParser()
 
@@ -55,10 +56,9 @@ def error_code():
 @app.route("/query", methods=["POST"])
 def fetch_result():
     results = dict()
+    start_time = time.time()
     try:
-    #logger.error("%d" % len(flask.request.form['data']))
         input_data = base64.decodestring(flask.request.form['data'])
-        #logger.error("%d" % len(input_data))
         image_data = []
         width = 224
         height = 224
@@ -70,20 +70,17 @@ def fetch_result():
                     pixel.append(ord(input_data[i * width * 4 + j + k]))
                 row.append(pixel)
             image_data.append(row)
-        #logger.error("%s" % image_data)
-        #image = Image.frombytes('RGB', (244,244), bytearray(base64.decodestring(flask.request.data)))
-        #image = image.resize((224, 224), Image.ANTIALIAS)
-        #print "image is", type(image), image
-        #image.show()
+
     except Exception as e:
         results["error"] = "9998"
         logger.error("convert error")
         logger.error("%s" % e)
         return json.dumps(results)
-    #print image.shape
 
-    image = Image.fromarray(np.array(image_data).astype('uint8'))
-    image.save("img.jpeg", "JPEG")
+    # image = Image.fromarray(np.array(image_data).astype('uint8'))
+    # image.save("img.jpeg", "JPEG")
+    decode_time = time.time()
+    print("Decoding time is %.2f" % (decode_time - start_time))
 
     logger.error("%d" % len(image_data))
     logger.error("%d" % len(image_data[0]))
@@ -97,6 +94,9 @@ def fetch_result():
         results["error"] = "9999"
         logger.error("Parse error")
         logger.error("%s" % e)
+
+    total_time = time.time()
+    print("Image2Vector + GetURL time is %.2f" % (total_time - decode_time))
     # Convert results to json format
     return json.dumps(results)
 

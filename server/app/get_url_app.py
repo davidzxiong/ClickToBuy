@@ -6,6 +6,7 @@ import json
 import os
 
 import numpy as np
+import time
 
 
 class GetUrlApp(Application):
@@ -24,13 +25,16 @@ class GetUrlApp(Application):
         return True
 
     def run(self, previous_result, *args, **kwargs):
+        start_time = time.time()
         vector = np.array(previous_result)
         min_dist = float('inf')
         result = None
         for key, value in self.data.items():
+            if value[0] != '0': continue
             key = np.array(key)
             cur_dist = sum(np.power(key - vector, 2))
             if cur_dist < min_dist:
                 min_dist = cur_dist
-                result = value
+                result = value[1:]
+        print "get url time is %.2f" % (time.time() - start_time)
         return result, 0
